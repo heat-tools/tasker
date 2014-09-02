@@ -18,15 +18,11 @@ class Circle:
         token = self.circle_token
         template = ('https://circleci.com/api/v1/project/{}'
                     '/tree/{}?circle-token={}')
-        if type(projects).__name__ == 'unicode':
+        if type(projects).__name__ == 'str':
             projects = [projects]
-            print 'projects is a string:', projects
-        else:
-            print 'projects is a', type(projects).__name__
+
         for project in projects:
-            print 'trigger build for', project
             trigger_url = template.format(project, gitref, token)
-            print 'posting to url', trigger_url
             requests.post(trigger_url)
 
         return True
