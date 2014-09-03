@@ -15,4 +15,4 @@ RUN chown -R celery.celery .
 RUN pip install -r requirements.txt
 
 USER celery
-CMD /usr/local/bin/celery -A tasker worker -B
+CMD /usr/local/bin/celery -A tasker worker -B --loglevel=info
