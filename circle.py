@@ -18,7 +18,8 @@ class Circle:
         token = self.circle_token
         template = ('https://circleci.com/api/v1/project/{}'
                     '/tree/{}?circle-token={}')
-        if type(projects).__name__ == 'str':
+        if type(projects).__name__ == 'str' or \
+           type(projects).__name__ == 'unicode':
             projects = [projects]
 
         for project in projects:
