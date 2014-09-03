@@ -14,8 +14,8 @@ org = Orginfo()
 app.conf.CELERY_TIMEZONE = os.environ.get('TZ', 'UTC')
 app.conf.CELERYBEAT_SCHEDULE = {
     'run-daily-builds': {
-        'task': 'tasker.trigger_test_build',
-        'schedule': timedelta(seconds=60),
+        'task': 'tasker.trigger_daily_builds',
+        'schedule': crontab(hour=16, minute=30, day_of_week='wed'),
         'args': ()
     }
 }
