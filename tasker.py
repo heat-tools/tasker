@@ -13,6 +13,7 @@ org = Orginfo()
 
 app.config_from_object('celeryconfig')
 
+
 @app.task
 def trigger_test_build():
     cci.trigger_build('rackspace-orchestration-templates/minecraft')
