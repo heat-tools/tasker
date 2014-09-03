@@ -16,7 +16,7 @@ app.conf.CELERYBEAT_SCHEDULE = {
     'run-daily-builds': {
         'task': 'tasker.trigger_daily_builds',
         'schedule': crontab(hour=16, minute=30, day_of_week='wed'),
-        'args': ()
+        'args': ('rackspace-orchestration-templates')
     }
 }
 
