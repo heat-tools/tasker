@@ -45,6 +45,7 @@ class Circle:
 
         for project in projects:
             trigger_url = template.format(project, gitref, token)
+            logging.info('triggering build for {} ref {}'.format(project, ref))
             requests.post(trigger_url)
 
         return True
