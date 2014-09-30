@@ -35,6 +35,11 @@ class Circle:
             'latest build_num is {}'.format(latest_build.get('build_num')))
         return latest_build.get('outcome')
 
+    def get_latest_build_info(self, org_name, repo, gitref='master'):
+        c = self.cci
+        build = c.build.recent(org_name, repo, branch=gitref)
+        return build
+
     def trigger_build(self, projects, gitref='master'):
         token = self.circle_token
         template = ('https://circleci.com/api/v1/project/{}'
@@ -45,7 +50,7 @@ class Circle:
 
         for project in projects:
             trigger_url = template.format(project, gitref, token)
-            logging.info('triggering build for {} ref {}'.format(project, ref))
+            logging.info('triggering build for {} ref {}'.format(project, gitref))
             requests.post(trigger_url)
 
         return True
@@ -78,4 +83,5 @@ class Orginfo:
                     yield repo.name
             except (UnknownObjectException, GithubException):
                 # no 'circle.yml', no don't return this one
+                logging.info('skipping repo {}; no circle.yml'.format(repo.name))
                 pass
