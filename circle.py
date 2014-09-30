@@ -2,9 +2,11 @@
 
 import os
 import json
+import logging
 import requests
+from circleclient import circleclient
 from github import Github
-from github.GithubException import UnknownObjectException
+from github.GithubException import UnknownObjectException, GithubException
 
 
 class Circle:
@@ -13,6 +15,25 @@ class Circle:
             self.circle_token = circle_token
         elif os.environ.get('CCI_TOKEN', None):
             self.circle_token = os.environ['CCI_TOKEN']
+
+        assert self.circle_token, ('You must supply a CircleCI token '
+                                   'in the environment variable CCI_TOKEN or '
+                                   'via command line.')
+
+        self.cci = circleclient.CircleClient(self.circle_token)
+
+    def get_latest_build_status(self, org_name, repo):
+        """Return the most recent build status for the repo"""
+        """which is a string as returned in the 'outcome' field"""
+        """of the CircleCI build status document"""
+        c = self.cci
+        logging.info('fetching build status for {}/{}'.format(org_name, repo))
+        builds = c.build.recent(org_name, repo)
+        builds.sort(key=lambda build: int(build.get('build_num')))
+        latest_build = builds.pop()
+        logging.info(
+            'latest build_num is {}'.format(latest_build.get('build_num')))
+        return latest_build.get('outcome')
 
     def trigger_build(self, projects, gitref='master'):
         token = self.circle_token
@@ -54,6 +75,6 @@ class Orginfo:
                 # skip repos with no 'circle.yml' file
                 if repo.get_contents('circle.yml'):
                     yield repo.name
-            except UnknownObjectException:
+            except (UnknownObjectException, GithubException):
                 # no 'circle.yml', no don't return this one
                 pass

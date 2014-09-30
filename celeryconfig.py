@@ -9,5 +9,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasker.trigger_daily_builds',
         'schedule': crontab(hour=9, minute=13),
         'args': ['rackspace-orchestration-templates']
+    },
+    'rebuild-failures': {
+        'task': 'tasker.trigger_failed_builds',
+        'schedule': crontab(hour=11, minute=13),
+        'args': ['rackspace-orchestration-templates']
     }
 }
