@@ -31,13 +31,14 @@ def trigger_failed_builds(orgname):
     for repo in org.get_prod_repos(orgname):
         if cci.get_latest_build_status(orgname, repo) == 'failed':
             logging.info('failed status for {}/{}: triggering build'.format(orgname, repo))
-            cci.trigger_build('/'.join(orgname, repo))
+            cci.trigger_build('/'.join([orgname, repo]))
         else:
             logging.info('skipping non-failing build for {}'.format(repo))
             pass
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    trigger_failed_builds('rackspace-orchestration-templates')
+    trigger_daily_builds('rackspace-orchestration-templates')
+    # trigger_failed_builds('rackspace-orchestration-templates')
     # for repo in org.get_prod_repos('rackspace-orchestration-templates'):
     #    cci.trigger_build('rackspace-orchestration-templates' + '/' + repo)
