@@ -23,7 +23,7 @@ def trigger_test_build():
 @app.task
 def trigger_daily_builds(orgname):
     for repo in org.get_prod_repos(orgname):
-        cci.trigger_build('rackspace-orchestration-templates' + '/' + repo)
+        cci.trigger_build(orgname + '/' + repo)
 
 
 @app.task
@@ -38,7 +38,7 @@ def trigger_failed_builds(orgname):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    trigger_daily_builds('rackspace-orchestration-templates')
+    trigger_daily_builds('rackspace-cookbooks')
     # trigger_failed_builds('rackspace-orchestration-templates')
     # for repo in org.get_prod_repos('rackspace-orchestration-templates'):
     #    cci.trigger_build('rackspace-orchestration-templates' + '/' + repo)
