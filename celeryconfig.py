@@ -17,7 +17,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'run-daily-builds-rackspace-cookbooks': {
         'task': 'tasker.trigger_daily_builds',
-        'schedule': crontab(minute=15),
+        'schedule': crontab(hour=0, minute=18),
         'args': ['rackspace-cookbooks']
     }
 }
