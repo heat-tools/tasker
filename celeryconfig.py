@@ -12,7 +12,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'rebuild-failures': {
         'task': 'tasker.trigger_failed_builds',
-        'schedule': crontab(hour=6, minute=13),
+        'schedule': crontab(hour='6,7', minute=13),
         'args': ['rackspace-orchestration-templates']
     },
     'run-daily-builds-rackspace-cookbooks': {
