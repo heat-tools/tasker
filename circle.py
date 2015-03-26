@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import os
-import json
 import logging
 import requests
 from circleclient import circleclient
@@ -50,7 +49,8 @@ class Circle:
 
         for project in projects:
             trigger_url = template.format(project, gitref, token)
-            logging.info('triggering build for {} ref {}'.format(project, gitref))
+            logging.info('triggering build for ' +
+                         '{} ref {}'.format(project, gitref))
             requests.post(trigger_url)
 
         return True
@@ -74,7 +74,6 @@ class Orginfo:
         return [repo.name for repo in repos]
 
     def get_prod_repos(self, org_name):
-        g = self.gh_instance
         repos = self._get_org_repos(org_name)
         for repo in repos:
             try:
@@ -83,5 +82,6 @@ class Orginfo:
                     yield repo.name
             except (UnknownObjectException, GithubException):
                 # no 'circle.yml', no don't return this one
-                logging.info('skipping repo {}; no circle.yml'.format(repo.name))
+                logging.info('skipping repo ' +
+                             '{}; no circle.yml'.format(repo.name))
                 pass

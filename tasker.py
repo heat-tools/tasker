@@ -1,13 +1,8 @@
 #! /usr/bin/env python
 
 import logging
-import os
-from datetime import timedelta
 from circle import Circle, Orginfo
-from github import Github
 from celery import Celery
-from celery.schedules import crontab
-
 app = Celery('tasker')
 cci = Circle()
 org = Orginfo()
@@ -30,7 +25,9 @@ def trigger_daily_builds(orgname):
 def trigger_failed_builds(orgname):
     for repo in org.get_prod_repos(orgname):
         if cci.get_latest_build_status(orgname, repo) == 'failed':
-            logging.info('failed status for {}/{}: triggering build'.format(orgname, repo))
+            logging.info(
+                'failed status for ' +
+                '{}/{}: triggering build'.format(orgname, repo))
             cci.trigger_build('/'.join([orgname, repo]))
         else:
             logging.info('skipping non-failing build for {}'.format(repo))
