@@ -1,0 +1,9 @@
+machine:
+  python:
+    version: 2.7.9
+dependencies:
+  pre:
+    - pip install flake8
+test:
+  override:
+    - flake8 .
