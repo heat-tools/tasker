@@ -1,16 +1,16 @@
-FROM ubuntu:14.04
+FROM gliderlabs/alpine:3.1
 MAINTAINER Jason Boyles
 
-RUN groupadd -r celery && useradd -r -g celery celery
-
-RUN apt-get update \
-    && apt-get install -y python python-pip --no-install-recommends
+RUN apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+ && rm -rf /var/cache/apk/*
 
 ADD . /usr/local/tasker
 
 WORKDIR /usr/local/tasker
-
-RUN chown -R celery.celery .
 
 RUN pip install -r requirements.txt
 
