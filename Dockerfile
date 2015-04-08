@@ -8,9 +8,13 @@ RUN apk add --update \
     build-base \
  && rm -rf /var/cache/apk/*
 
+RUN adduser -Dg celery celery
+
 ADD . /usr/local/tasker
 
 WORKDIR /usr/local/tasker
+
+RUN chown -R celery.celery .
 
 RUN pip install -r requirements.txt
 
