@@ -1,7 +1,7 @@
 import os
 from celery.schedules import crontab
 
-BROKER_URL = 'redis://redis:6379/0'
+BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0')
 
 CELERY_TIMEZONE = os.environ.get('TZ', 'America/Chicago')
 CELERYBEAT_SCHEDULE = {
