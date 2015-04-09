@@ -2,6 +2,7 @@ FROM gliderlabs/alpine:3.1
 MAINTAINER Jason Boyles
 
 RUN apk add --update \
+    ca-certificates \
     python \
     python-dev \
     py-pip \
