@@ -1,4 +1,6 @@
 machine:
+  services:
+    - docker
   python:
     version: 2.7.9
 dependencies:
@@ -7,3 +9,9 @@ dependencies:
 test:
   override:
     - flake8 .
+    - docker build .
+deployment:
+  stable:
+      branch: master
+      commands:
+        - curl --data "build=true" -X POST $DOCKER_HUB_TRIGGER_URL
