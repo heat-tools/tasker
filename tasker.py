@@ -3,6 +3,7 @@
 import logging
 from circle import Circle, Orginfo
 from celery import Celery
+
 app = Celery('tasker')
 cci = Circle()
 org = Orginfo()
@@ -16,9 +17,23 @@ def trigger_test_build():
 
 
 @app.task
-def trigger_daily_builds(orgname):
-    for repo in org.get_prod_repos(orgname):
-        cci.trigger_build(orgname + '/' + repo)
+def trigger_daily_builds(orgname, time_range=3600):
+    """ spread triggers over time_range seconds """
+    """ using Celery's `countdown` to delay     """
+    logmessage = '{}/{} build triggering {}s from now'
+    repos = [r for r in org.get_prod_repos(orgname)]
+    index = 0
+    for repo in repos:
+        args = [orgname, repo]
+        countdown = int(time_range*(float(index)/float(len(repos))))
+        logging.info(logmessage.format(orgname, repo, countdown))
+        trigger_single_build.apply_async(args=args, countdown=countdown)
+        index += 1
+
+
+@app.task
+def trigger_single_build(orgname, repo):
+    cci.trigger_build(orgname + '/' + repo)
 
 
 @app.task

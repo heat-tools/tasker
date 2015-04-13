@@ -7,8 +7,9 @@ CELERY_TIMEZONE = os.environ.get('TZ', 'America/Chicago')
 CELERYBEAT_SCHEDULE = {
     'run-daily-builds-heat': {
         'task': 'tasker.trigger_daily_builds',
-        'schedule': crontab(hour=4, minute=13),
-        'args': ['rackspace-orchestration-templates']
+        'schedule': crontab(hour=3, minute=13),
+        'args': ['rackspace-orchestration-templates'],
+        'kwargs': {'time_range': 7200}
     },
     'rebuild-failures': {
         'task': 'tasker.trigger_failed_builds',
