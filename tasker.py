@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import heat
 import logging
 from circle import Circle, Orginfo
 from celery import Celery
@@ -32,6 +33,11 @@ def trigger_failed_builds(orgname):
         else:
             logging.info('skipping non-failing build for {}'.format(repo))
             pass
+
+
+@app.task
+def delete_stacks_older_than(interval, region_list):
+    heat.delete_stacks_older_than(interval, region_list=region_list)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
