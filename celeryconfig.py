@@ -1,3 +1,4 @@
+import datetime
 import os
 from celery.schedules import crontab
 
@@ -25,5 +26,11 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasker.trigger_daily_builds',
         'schedule': crontab(hour=0, minute=30),
         'args': ['AutomationSupport']
+    },
+    'delete-stacks-older-than': {
+        'task': 'tasker.delete_stacks_older_than',
+        'schedule': crontab(hour='*', minute='24'),
+        'args': [datetime.timedelta(hours=6),
+                 ["DFW", "ORD", "IAD", "HKG", "SYD"]]
     }
 }
